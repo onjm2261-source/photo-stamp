@@ -11,8 +11,8 @@
   "background_color": "#eef0f2",
   "theme_color": "#f0a81c",
   "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    { "src": "/photo-stamp/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/photo-stamp/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/photo-stamp/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
