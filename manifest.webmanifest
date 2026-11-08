@@ -1,0 +1,18 @@
+{
+  "id": "/photo-stamp/",
+  "name": "현장 사진 문구",
+  "short_name": "현장사진",
+  "description": "현장 사진에 현장명·날짜·위치·장단점·조치 문구를 넣어 저장합니다.",
+  "lang": "ko",
+  "start_url": "/photo-stamp/",
+  "scope": "/photo-stamp/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#eef0f2",
+  "theme_color": "#f0a81c",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
