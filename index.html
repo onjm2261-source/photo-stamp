@@ -9,72 +9,80 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <title>현장 사진 문구</title>
 <style>
-:root {
-  --bg:#eef0f2; --surface:#fff; --fg:#1d232a; --muted:#5d6873; --line:#d5dae0;
-  --accent:#f0a81c; --accent-ink:#1d1a12; --focus:#2a6fdb;
-  --font:"Apple SD Gothic Neo","Noto Sans KR","Noto Sans CJK KR","Malgun Gothic",system-ui,sans-serif;
-}
-@media (prefers-color-scheme: dark){
-  :root{--bg:#14181c;--surface:#1d2228;--fg:#e7eaee;--muted:#9aa5b0;--line:#313840;--accent:#f3b33a;--focus:#6fa2ff;color-scheme:dark}
-}
+:root{--bg:#eef0f2;--surface:#fff;--fg:#1d232a;--muted:#5d6873;--line:#d5dae0;--accent:#f0a81c;--accent-ink:#1d1a12;--focus:#2a6fdb;
+  --good:#1f8a4c;--bad:#d2362a;--check:#c98a00;
+  --font:"Apple SD Gothic Neo","Noto Sans KR","Noto Sans CJK KR","Malgun Gothic",system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#14181c;--surface:#1d2228;--fg:#e7eaee;--muted:#9aa5b0;--line:#313840;--accent:#f3b33a;--focus:#6fa2ff;color-scheme:dark}}
 html,body{margin:0}
-body{background:var(--bg);color:var(--fg);font:15px/1.5 var(--font);
-  padding:16px max(14px,env(safe-area-inset-right)) 40px max(14px,env(safe-area-inset-left))}
+body{background:var(--bg);color:var(--fg);font:15px/1.5 var(--font);padding:16px max(14px,env(safe-area-inset-right)) 40px max(14px,env(safe-area-inset-left))}
 .wrap{max-width:560px;margin:0 auto;display:grid;gap:14px}
 h1{margin:0;font-size:21px}
 .sub{margin:2px 0 0;color:var(--muted);font-size:13px}
+[hidden]{display:none!important}
 .preview{position:relative;background:#0d0f11;border-radius:10px;overflow:hidden;min-height:160px;display:grid;place-items:center}
 .preview img{display:block;width:100%;height:auto}
 .tag{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.6);color:#fff;font-size:12px;padding:3px 8px;border-radius:4px}
-[hidden]{display:none!important}
 .hint{margin:0;font-size:13px;color:var(--muted)}
 .actions{display:grid;grid-template-columns:1fr auto auto;gap:10px}
-.btn{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--fg);
-  font:600 16px/1 var(--font);padding:16px 18px;border-radius:10px;cursor:pointer;min-height:54px;
-  display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:600 16px/1 var(--font);padding:16px 18px;border-radius:10px;cursor:pointer;min-height:54px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
 .btn:disabled{opacity:.45}
 .btn.shoot{background:var(--accent);color:var(--accent-ink);border-color:transparent;font-size:18px}
+.btn.small{min-height:40px;padding:8px 12px;font-size:14px}
 .dot{width:14px;height:14px;border-radius:50%;border:3px solid currentColor}
 #cam{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
-.btn:focus-visible,input:focus-visible,textarea:focus-visible,label.shoot:focus-within{outline:3px solid var(--focus);outline-offset:2px}
+.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,.chip:focus-visible,label.shoot:focus-within{outline:3px solid var(--focus);outline-offset:2px}
 .toast{min-height:1.5em;margin:0;font-size:14px;font-weight:600}
-.toast.err{color:#c43d2b}
+.toast.err{color:var(--bad)}
 .linkbtn{appearance:none;background:none;border:0;padding:4px 0;color:var(--muted);font:500 14px var(--font);text-decoration:underline;cursor:pointer}
-.saved-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:14px}
+.ptitle{margin:0;font-size:15px;font-weight:800}
+.ptitle small{font-weight:500;color:var(--muted);font-size:12px;margin-left:6px}
 .field{display:grid;gap:6px;min-width:0}
 .fhead{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .fname{font-size:13px;font-weight:700;color:var(--muted)}
+.fname .req{color:var(--bad);margin-left:2px}
+.field.missing .fname{color:var(--bad)}
 .cnt{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
-.cnt.full{color:#c43d2b;font-weight:700}
 .irow{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:stretch}
-input[type=text],textarea{font:400 17px/1.4 var(--font);color:var(--fg);background:var(--bg);border:1px solid var(--line);
-  border-radius:8px;padding:10px 12px;width:100%;box-sizing:border-box;min-width:0}
+.loc3{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+input[type=text],input[type=date],select,textarea{font:400 17px/1.4 var(--font);color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;width:100%;box-sizing:border-box;min-width:0}
 textarea{resize:none}
-.mic{appearance:none;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:8px;
-  font:600 14px var(--font);padding:0 12px;min-width:64px;cursor:pointer}
-.mic[aria-pressed="true"]{background:#d2362a;color:#fff;border-color:#d2362a}
+.ro{padding:10px 12px;border-radius:8px;background:var(--bg);border:1px dashed var(--line);font-variant-numeric:tabular-nums}
+.mic{appearance:none;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:8px;font:600 14px var(--font);padding:0 12px;min-width:64px;cursor:pointer}
+.mic[aria-pressed="true"]{background:var(--bad);color:#fff;border-color:var(--bad)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{appearance:none;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:999px;font:600 14px var(--font);padding:8px 12px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+.status{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.st{appearance:none;border:2px solid var(--line);background:var(--bg);color:var(--fg);border-radius:10px;font:700 16px var(--font);padding:12px 4px;cursor:pointer}
+.st[data-v="양호"][aria-pressed="true"]{background:var(--good);border-color:var(--good);color:#fff}
+.st[data-v="미흡"][aria-pressed="true"]{background:var(--bad);border-color:var(--bad);color:#fff}
+.st[data-v="확인 필요"][aria-pressed="true"]{background:var(--check);border-color:var(--check);color:#fff}
 .check{display:flex;align-items:center;gap:10px;font-size:15px;cursor:pointer}
-.check input{width:20px;height:20px;accent-color:var(--accent);margin:0}
+.check input{width:20px;height:20px;accent-color:var(--accent);margin:0;flex:none}
 input[type=range]{width:100%;accent-color:var(--accent)}
 .sheet{position:fixed;inset:0;z-index:20;background:rgba(8,10,12,.92);overflow-y:auto;padding:16px}
 .sheet-in{max-width:560px;margin:0 auto;display:grid;gap:12px;color:#f2f4f6}
 .sheet img{width:100%;height:auto;border-radius:8px}
 .sheet p{margin:0}
+.sitelist{display:grid;gap:6px}
+.siteitem{display:flex;justify-content:space-between;align-items:center;gap:8px;background:#232a31;border-radius:8px;padding:8px 10px}
+.note{font-size:12px;color:var(--muted);margin:0}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
     <h1>현장 사진 문구</h1>
-    <p class="sub">글자만 사진 왼쪽 맨 아래에 붙어서 들어갑니다</p>
+    <p class="sub">원본은 그대로 두고, 글자를 넣은 사진을 따로 저장합니다</p>
   </header>
 
   <div class="preview">
     <img id="out" alt="문구가 합성된 사진 미리보기">
     <span class="tag" id="tag">예시 화면</span>
   </div>
-  <p class="hint" id="hint">아래 칸을 채우고 촬영하세요. 찍으면 바로 저장됩니다.</p>
+  <p class="hint" id="hint">빨간 * 칸을 채우고 촬영하세요.</p>
 
   <div class="actions">
     <label class="btn shoot" for="cam"><span class="dot" aria-hidden="true"></span>촬영</label>
@@ -82,345 +90,122 @@ input[type=range]{width:100%;accent-color:var(--accent)}
     <button class="btn" id="shareBtn" type="button" disabled hidden>공유</button>
     <input id="cam" type="file" accept="image/*" capture="environment">
   </div>
-  <div class="saved-row">
+  <div class="row">
     <p class="toast" id="toast" role="status" aria-live="polite"></p>
     <button class="linkbtn" id="notSaved" type="button" hidden>저장이 안 됐나요?</button>
   </div>
 
-  <div class="sheet" id="saveSheet" hidden role="dialog" aria-label="사진 저장">
-    <div class="sheet-in">
-      <p style="font-size:18px;font-weight:700">다운로드가 안 됐다면</p>
-      <p>아래 사진을 <b>길게 누르고</b> <b>'이미지 다운로드'</b>(또는 '이미지 저장')를 누르세요.</p>
-      <img id="saveImg" alt="저장할 사진">
-      <p id="saveName" style="color:#aab3bc;word-break:break-all"></p>
-      <button class="btn" id="saveClose" type="button">닫기</button>
+  <section class="panel" aria-label="필수 칸">
+    <p class="ptitle">필수<small>사진에 들어갑니다</small></p>
+    <div class="field" id="fSite">
+      <div class="fhead"><span class="fname">현장명<span class="req">*</span></span><button class="linkbtn" id="siteManage" type="button">현장 목록 관리</button></div>
+      <select id="site"></select>
     </div>
-  </div>
-
-  <section class="panel" aria-label="문구 입력">
     <div class="field">
-      <div class="fhead"><span class="fname">현장명 (바꾸기 전까지 계속 유지)</span></div>
-      <input type="text" id="site" placeholder="예: 둔촌주공 OO동" autocomplete="off">
+      <div class="fhead"><span class="fname">날짜·시간 (촬영 시각 자동, 수정 불가)</span></div>
+      <div class="ro" id="when">촬영하면 자동으로 들어갑니다</div>
     </div>
-
-    <div class="field">
-      <div class="fhead"><span class="fname">사진 위치 (명사만)</span><span class="cnt" id="cLoc"></span></div>
+    <div class="field" id="fLoc">
+      <div class="fhead"><span class="fname">위치<span class="req">*</span> (동·층·부위)</span><span class="cnt" id="locPreview"></span></div>
+      <div class="loc3">
+        <input type="text" id="dong" placeholder="동 (예: 101)" inputmode="numeric" autocomplete="off">
+        <input type="text" id="floor" placeholder="층 (예: 12, B1)" autocomplete="off">
+      </div>
+      <div class="chips" id="partChips"></div>
       <div class="irow">
-        <input type="text" id="loc" placeholder="예: 거실, 욕실, 방 1" autocomplete="off">
-        <button class="mic" type="button" data-for="loc" aria-pressed="false">🎤 음성</button>
+        <input type="text" id="part" placeholder="부위 (목록에 없으면 직접 입력)" autocomplete="off" maxlength="16">
+        <button class="mic" type="button" data-for="part" aria-pressed="false">🎤 음성</button>
       </div>
     </div>
-
-    <div class="field">
-      <div class="fhead"><span class="fname">사진 장단점</span><span class="cnt" id="cPros"></span></div>
-      <div class="irow">
-        <textarea id="pros" rows="2" placeholder="예: 타일 줄눈 양호, 모서리 들뜸"></textarea>
-        <button class="mic" type="button" data-for="pros" aria-pressed="false">🎤 음성</button>
+    <div class="field" id="fTrade">
+      <div class="fhead"><span class="fname">공종<span class="req">*</span></span></div>
+      <div class="chips" id="tradeChips"></div>
+    </div>
+    <div class="field" id="fStatus">
+      <div class="fhead"><span class="fname">상태<span class="req">*</span></span></div>
+      <div class="status" id="statusBtns">
+        <button class="st" type="button" data-v="양호" aria-pressed="false">양호</button>
+        <button class="st" type="button" data-v="미흡" aria-pressed="false">미흡</button>
+        <button class="st" type="button" data-v="확인 필요" aria-pressed="false">확인 필요</button>
       </div>
     </div>
+  </section>
 
+  <section class="panel" aria-label="내용">
+    <p class="ptitle">내용<small>비워도 저장됩니다</small></p>
     <div class="field">
-      <div class="fhead"><span class="fname">조치사항 및 대안</span><span class="cnt" id="cAct"></span></div>
+      <div class="fhead"><span class="fname">사진 찍은 이유</span><span class="cnt" id="cReason"></span></div>
       <div class="irow">
-        <textarea id="act" rows="2" placeholder="예: 들뜬 부위 재시공 후 재점검"></textarea>
-        <button class="mic" type="button" data-for="act" aria-pressed="false">🎤 음성</button>
+        <input type="text" id="reason" placeholder="예: 관통부 주변 모서리 파손" autocomplete="off">
+        <button class="mic" type="button" data-for="reason" aria-pressed="false">🎤 음성</button>
       </div>
     </div>
+    <div class="field">
+      <div class="fhead"><span class="fname">문제점</span><span class="cnt" id="cProblem"></span></div>
+      <div class="chips" id="problemChips"></div>
+      <div class="irow">
+        <textarea id="problem" rows="2" placeholder="후보를 누르거나 직접 입력"></textarea>
+        <button class="mic" type="button" data-for="problem" aria-pressed="false">🎤 음성</button>
+      </div>
+    </div>
+    <div class="field">
+      <div class="fhead"><span class="fname">조언·대책</span><span class="cnt" id="cAdvice"></span></div>
+      <div class="chips" id="adviceChips"></div>
+      <div class="irow">
+        <textarea id="advice" rows="2" placeholder="짧게. 예: 담수시험 재실시, 사진 첨부"></textarea>
+        <button class="mic" type="button" data-for="advice" aria-pressed="false">🎤 음성</button>
+      </div>
+    </div>
+  </section>
 
-    <label class="check"><input type="checkbox" id="autosave" checked> 촬영하면 바로 자동 저장</label>
-    <label class="check"><input type="checkbox" id="clearAfter" checked> 저장 후 위치·장단점·조치 칸 비우기</label>
+  <section class="panel" aria-label="기록 전용">
+    <p class="ptitle">기록 전용<small>사진에는 안 들어가고 기록에만 저장</small></p>
+    <div class="loc3">
+      <label class="field"><span class="fname">전달받은 사람</span><select id="to"></select></label>
+      <label class="field"><span class="fname">보완 기한·재확인일</span><input type="date" id="due"></label>
+    </div>
+    <label class="field"><span class="fname">태그 (자동 제안, 고칠 수 있음)</span><input type="text" id="tags" autocomplete="off"></label>
+    <label class="field"><span class="fname">작성자 직책 (한 번 넣으면 유지)</span><input type="text" id="author" placeholder="예: 품질담당" autocomplete="off"></label>
+    <div class="row">
+      <span class="note" id="recCount"></span>
+      <button class="btn small" id="exportBtn" type="button">기록 내보내기 (엑셀용 CSV)</button>
+    </div>
+  </section>
 
-    <label class="field">
-      <span class="fname">글자 크기 <span id="sizeVal"></span></span>
-      <input type="range" id="size" min="2" max="7" step="0.25" value="3.5">
-    </label>
+  <section class="panel" aria-label="설정">
+    <p class="ptitle">설정</p>
+    <label class="check"><input type="checkbox" id="autosave" checked> 촬영하면 바로 자동 저장 (필수 칸이 다 차 있을 때)</label>
+    <label class="check"><input type="checkbox" id="saveOrig" checked> 원본 사진도 따로 저장</label>
+    <label class="check"><input type="checkbox" id="clearAfter" checked> 저장 후 이유·문제점·조언 칸 비우기</label>
+    <label class="check"><input type="checkbox" id="hideSite"> 외부 공유용: 사진 글자에서 현장명 빼기</label>
+    <label class="field"><span class="fname">글자 크기 <span id="sizeVal"></span></span><input type="range" id="size" min="2" max="6" step="0.25" value="3"></label>
+    <p class="note">사진 속 사람 얼굴이 나오지 않게 찍어 주세요. 기록은 이 휴대폰에만 저장되며, 통신이 없어도 촬영·저장됩니다.</p>
   </section>
 </div>
 
-<script>
-(function () {
-  const $ = (id) => document.getElementById(id);
-  const out = $("out"), tag = $("tag"), hint = $("hint"), toast = $("toast");
-  const saveBtn = $("saveBtn"), shareBtn = $("shareBtn"), cam = $("cam");
-  const ui = { site: $("site"), loc: $("loc"), pros: $("pros"), act: $("act"),
-               autosave: $("autosave"), clearAfter: $("clearAfter"), size: $("size") };
+<div class="sheet" id="saveSheet" hidden role="dialog" aria-label="사진 저장">
+  <div class="sheet-in">
+    <p style="font-size:18px;font-weight:700">다운로드가 안 됐다면</p>
+    <p>아래 사진을 <b>길게 누르고</b> <b>'이미지 다운로드'</b>(또는 '이미지 저장')를 누르세요.</p>
+    <img id="saveImg" alt="저장할 사진">
+    <p id="saveName" style="color:#aab3bc;word-break:break-all"></p>
+    <button class="btn" id="saveClose" type="button">닫기</button>
+  </div>
+</div>
 
-  // 글자 수 제한 (여기 숫자만 바꾸면 됩니다)
-  const LIMIT = { loc: 12, pros: 20, act: 30 };
-  const MAX_SIDE = 4096;
-  const FONT = '"Apple SD Gothic Neo","Noto Sans KR","Noto Sans CJK KR","Malgun Gothic",sans-serif';
+<div class="sheet" id="siteSheet" hidden role="dialog" aria-label="현장 목록 관리">
+  <div class="sheet-in">
+    <p style="font-size:18px;font-weight:700">현장 목록</p>
+    <p style="color:#aab3bc">등록명 그대로 한 번만 넣어 두세요. 촬영할 때는 목록에서 고릅니다.</p>
+    <div class="irow">
+      <input type="text" id="newSite" placeholder="현장 등록명" autocomplete="off">
+      <button class="btn small" id="addSite" type="button">추가</button>
+    </div>
+    <div class="sitelist" id="siteList"></div>
+    <button class="btn" id="siteClose" type="button">닫기</button>
+  </div>
+</div>
 
-  let source = null, shotTime = null, lastBlob = null, lastUrl = null;
-
-  // ----- 설정 기억 (현장명 등은 이 브라우저에 유지) -----
-  const KEY = "photo-stamp-v2";
-  function loadSettings() {
-    try {
-      const s = JSON.parse(localStorage.getItem(KEY) || "null");
-      if (!s) return;
-      if (typeof s.site === "string") ui.site.value = s.site;
-      ui.autosave.checked = s.autosave !== false;
-      ui.clearAfter.checked = s.clearAfter !== false;
-      if (s.size) ui.size.value = s.size;
-    } catch (e) {}
-  }
-  function saveSettings() {
-    try {
-      localStorage.setItem(KEY, JSON.stringify({
-        site: ui.site.value, autosave: ui.autosave.checked,
-        clearAfter: ui.clearAfter.checked, size: ui.size.value
-      }));
-    } catch (e) {}
-  }
-
-  // ----- 날짜 (시간 없이 연·월·일) -----
-  const pad = (n) => String(n).padStart(2, "0");
-  const fmtDate = (d) => `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일`;
-  const fileStamp = (d) => `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
-
-  // ----- 위치: 조사 제거, 명사만 남기기 -----
-  const P_LONG = ["에서는","에서도","에서","에게","으로는","으로","에는","에도","까지","부터","입니다","이에요","에요","예요","이다","이고","이며","이라","였다","처럼","보다","마다","한테","께서"];
-  const P_ONE = "은는이가을를도만로와과의에랑";
-  const KEEP1 = "방벽문층창집";   // 한 글자 명사 (방이, 벽은 …)
-  function stripWord(w) {
-    w = w.replace(/[.,!?~…]+$/g, "");
-    if (!w) return "";
-    for (const p of P_LONG) if (w.length > p.length && w.endsWith(p)) return w.slice(0, -p.length);
-    const last = w[w.length - 1];
-    if (P_ONE.includes(last) && w.length >= 2) {
-      const rest = w.slice(0, -1);
-      if (rest.length >= 2 || KEEP1.includes(rest) || /^\d+$/.test(rest)) return rest;
-    }
-    return w;
-  }
-  function cleanLoc(t) {
-    return (t || "").split(/[\s,，、]+/).map(stripWord).filter(Boolean).join(" ");
-  }
-
-  // ----- 글자 수 표시 -----
-  function counters() {
-    [["loc","cLoc"],["pros","cPros"],["act","cAct"]].forEach(([k, c]) => {
-      const n = ui[k].value.length;
-      $(c).textContent = n + " / " + LIMIT[k] + "자";
-      $(c).className = "cnt" + (n >= LIMIT[k] ? " full" : "");
-    });
-  }
-  ["loc","pros","act"].forEach((k) => ui[k].maxLength = LIMIT[k]);
-
-  // ----- 줄 만들기 -----
-  function buildLines() {
-    const lines = [];
-    const site = ui.site.value.trim();
-    const date = fmtDate(shotTime || new Date());
-    lines.push(site ? site + "  " + date : date);
-    const loc = cleanLoc(ui.loc.value);
-    if (loc) lines.push("위치 : " + loc);
-    const pros = ui.pros.value.replace(/\s*\n\s*/g, " ").trim();
-    if (pros) lines.push("장단점 : " + pros);
-    const act = ui.act.value.replace(/\s*\n\s*/g, " ").trim();
-    if (act) lines.push("조치 : " + act);
-    return lines;
-  }
-
-  function wrap(ctx, text, maxW) {
-    const res = []; let cur = "";
-    for (const ch of text) {
-      if (ctx.measureText(cur + ch).width > maxW && cur) { res.push(cur); cur = ch; }
-      else cur += ch;
-    }
-    if (cur) res.push(cur);
-    return res;
-  }
-
-  // 글자 뒤 영역 밝기 (0~255)
-  function lumaAt(ctx, x, y, w, h, cw, ch) {
-    x = Math.max(0, Math.floor(x)); y = Math.max(0, Math.floor(y));
-    w = Math.max(1, Math.min(cw - x, Math.ceil(w))); h = Math.max(1, Math.min(ch - y, Math.ceil(h)));
-    const d = ctx.getImageData(x, y, w, h).data;
-    const step = Math.max(1, Math.floor(d.length / 4 / 4000)) * 4;
-    let sum = 0, n = 0;
-    for (let i = 0; i < d.length; i += step) { sum += 0.299 * d[i] + 0.587 * d[i+1] + 0.114 * d[i+2]; n++; }
-    return n ? sum / n : 128;
-  }
-
-  // ----- 문구 그리기: 배경 없음, 왼쪽·맨 아래에 붙임, 밝기에 따라 글자색 자동 -----
-  function drawStamp(ctx, w, h) {
-    const base = buildLines();
-    const fs = Math.round(Math.min(w, h) * Number(ui.size.value) / 100);
-    const lh = Math.round(fs * 1.22);
-    const margin = Math.max(2, Math.round(Math.min(w, h) * 0.006));   // 거의 여유 없이
-    ctx.font = `700 ${fs}px ${FONT}`;
-    ctx.textBaseline = "alphabetic";
-    ctx.textAlign = "left";
-    ctx.lineJoin = "round";
-    const maxW = w - margin * 2;
-    const rows = [];
-    base.forEach((t) => wrap(ctx, t, maxW).forEach((r) => rows.push(r)));
-
-    const lastBase = h - margin - Math.round(fs * 0.2);
-    rows.forEach((t, i) => {
-      const y = lastBase - (rows.length - 1 - i) * lh;
-      const tw = ctx.measureText(t).width;
-      const L = lumaAt(ctx, margin, y - fs * 0.9, tw, fs * 1.1, w, h);
-      const light = L < 135;                         // 어두운 배경 → 흰 글자, 밝은 배경 → 검은 글자
-      ctx.lineWidth = Math.max(2, fs * 0.2);
-      ctx.strokeStyle = light ? "rgba(0,0,0,.85)" : "rgba(255,255,255,.9)";
-      ctx.strokeText(t, margin, y);
-      ctx.fillStyle = light ? "#ffffff" : "#111111";
-      ctx.fillText(t, margin, y);
-    });
-  }
-
-  function drawSample(ctx, w, h) {
-    const sky = ctx.createLinearGradient(0, 0, 0, h * 0.62);
-    sky.addColorStop(0, "#8fb3d4"); sky.addColorStop(1, "#d7e2ea");
-    ctx.fillStyle = sky; ctx.fillRect(0, 0, w, h);
-    ctx.fillStyle = "#9a9284"; ctx.fillRect(0, h * 0.62, w, h * 0.38);
-    ctx.fillStyle = "#b9bcbf"; ctx.fillRect(w * 0.18, h * 0.22, w * 0.42, h * 0.42);
-    ctx.fillStyle = "#7d858d";
-    for (let i = 0; i < 4; i++) ctx.fillRect(w * 0.18, h * (0.22 + i * 0.105), w * 0.42, h * 0.012);
-    for (let j = 0; j < 5; j++) ctx.fillRect(w * (0.18 + j * 0.1), h * 0.22, w * 0.012, h * 0.42);
-    ctx.fillStyle = "#e0a222";
-    ctx.fillRect(w * 0.72, h * 0.08, w * 0.02, h * 0.56);
-    ctx.fillRect(w * 0.5, h * 0.08, w * 0.42, h * 0.018);
-  }
-
-  // ----- 렌더 -----
-  let renderId = 0;
-  async function render() {
-    const id = ++renderId;
-    let w, h;
-    if (source) {
-      const k = Math.min(1, MAX_SIDE / Math.max(source.width, source.height));
-      w = Math.round(source.width * k); h = Math.round(source.height * k);
-    } else { w = 1200; h = 900; }
-    const c = document.createElement("canvas");
-    c.width = w; c.height = h;
-    const ctx = c.getContext("2d", { willReadFrequently: true });
-    if (source) ctx.drawImage(source, 0, 0, w, h); else drawSample(ctx, w, h);
-    drawStamp(ctx, w, h);
-    const blob = await new Promise((res) => c.toBlob(res, "image/jpeg", 0.92));
-    if (id !== renderId || !blob) return;
-    if (lastUrl) URL.revokeObjectURL(lastUrl);
-    lastBlob = blob; lastUrl = URL.createObjectURL(blob);
-    out.src = lastUrl;
-  }
-
-  async function loadImage(file) {
-    if ("createImageBitmap" in window) {
-      try { return await createImageBitmap(file, { imageOrientation: "from-image" }); } catch (e) {}
-    }
-    return new Promise((res, rej) => {
-      const img = new Image();
-      img.onload = () => res(img);
-      img.onerror = () => rej(new Error("x"));
-      img.src = URL.createObjectURL(file);
-    });
-  }
-
-  function say(msg, err) { toast.textContent = msg; toast.className = "toast" + (err ? " err" : ""); }
-  const fileName = () => `현장_${fileStamp(shotTime || new Date())}.jpg`;
-  const toDataUrl = (blob) => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(blob); });
-
-  function save() {
-    if (!lastBlob || !source) return;
-    try {
-      const a = document.createElement("a");
-      a.href = lastUrl; a.download = fileName();
-      document.body.appendChild(a); a.click(); a.remove();
-      say("저장했습니다 · " + fileName());
-      $("notSaved").hidden = false;
-    } catch (e) { openSheet(); }
-  }
-  async function openSheet() {
-    let src = lastUrl;
-    try { src = await toDataUrl(lastBlob); } catch (e) {}
-    $("saveImg").src = src; $("saveName").textContent = fileName();
-    $("saveSheet").hidden = false;
-  }
-  $("notSaved").addEventListener("click", openSheet);
-  $("saveClose").addEventListener("click", () => { $("saveSheet").hidden = true; });
-
-  async function share() {
-    if (!lastBlob || !source) return;
-    try {
-      const file = new File([lastBlob], fileName(), { type: "image/jpeg" });
-      if (navigator.canShare && navigator.canShare({ files: [file] })) await navigator.share({ files: [file] });
-      else say("이 브라우저는 공유를 지원하지 않습니다. 저장 후 보내 주세요.", true);
-    } catch (e) { if (e && e.name !== "AbortError") say("공유하지 못했습니다.", true); }
-  }
-
-  function clearFields() {
-    clearTimeout(t);   // 대기 중인 다시 그리기가 있으면 취소 (저장된 사진 유지)
-    ["loc", "pros", "act"].forEach((k) => ui[k].value = "");
-    counters();
-  }
-
-  // ----- 촬영 -----
-  cam.addEventListener("change", async () => {
-    const file = cam.files && cam.files[0];
-    cam.value = "";
-    if (!file) return;
-    say("문구를 넣는 중…");
-    try {
-      ui.loc.value = cleanLoc(ui.loc.value); counters();
-      source = await loadImage(file);
-      shotTime = new Date();                 // 찍은 그날 날짜
-      await render();
-      tag.hidden = true;
-      saveBtn.disabled = false; shareBtn.disabled = false;
-      say("");
-      if (ui.autosave.checked) {
-        save();
-        hint.textContent = "저장됐습니다. 다음 사진을 찍으세요.";
-      } else {
-        hint.textContent = "문구를 고치면 사진에 바로 반영됩니다. 저장을 누르세요.";
-      }
-      if (ui.autosave.checked && ui.clearAfter.checked) clearFields();   // 사진은 그대로 두고 칸만 비움
-    } catch (e) {
-      say("사진을 불러오지 못했습니다. 다시 촬영해 주세요.", true);
-    }
-  });
-
-  // ----- 음성 입력 -----
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  document.querySelectorAll(".mic").forEach((btn) => btn.addEventListener("click", () => {
-    const k = btn.dataset.for, field = ui[k];
-    if (!SR) { say("이 브라우저는 음성 입력이 안 됩니다. 키보드의 마이크 버튼을 쓰세요.", true); field.focus(); return; }
-    const rec = new SR();
-    rec.lang = "ko-KR"; rec.interimResults = false; rec.maxAlternatives = 1;
-    btn.setAttribute("aria-pressed", "true"); btn.textContent = "듣는 중";
-    const done = () => { btn.setAttribute("aria-pressed", "false"); btn.textContent = "🎤 음성"; };
-    rec.onresult = (e) => {
-      let t = e.results[0][0].transcript.trim();
-      if (k === "loc") t = cleanLoc(t);
-      field.value = t.slice(0, LIMIT[k]);
-      counters(); onChange();
-    };
-    rec.onerror = () => { say("음성을 인식하지 못했습니다. 키보드 마이크를 써 보세요.", true); done(); };
-    rec.onend = done;
-    try { rec.start(); } catch (e) { done(); }
-  }));
-
-  // ----- 이벤트 -----
-  let t;
-  function onChange() { saveSettings(); clearTimeout(t); t = setTimeout(render, 120); }
-  ["site", "loc", "pros", "act"].forEach((k) => ui[k].addEventListener("input", () => { counters(); onChange(); }));
-  ui.loc.addEventListener("blur", () => { ui.loc.value = cleanLoc(ui.loc.value); counters(); onChange(); });
-  [ui.autosave, ui.clearAfter].forEach((el) => el.addEventListener("change", saveSettings));
-  ui.size.addEventListener("input", () => { $("sizeVal").textContent = ui.size.value + "%"; onChange(); });
-  saveBtn.addEventListener("click", save);
-  shareBtn.addEventListener("click", share);
-  if (navigator.canShare) shareBtn.hidden = false;
-
-  // ----- 시작 -----
-  loadSettings();
-  if (!ui.site.value) { ui.site.value = "OO현장"; }
-  $("sizeVal").textContent = ui.size.value + "%";
-  counters();
-  render();
-  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
-})();
-</script>
+<script src="app.js"></script>
 </body>
 </html>

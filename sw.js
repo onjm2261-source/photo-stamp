@@ -1,6 +1,6 @@
 // 오프라인에서도 열리도록 앱 파일을 저장해 둡니다. 파일을 고치면 아래 버전 숫자를 올리세요.
-const CACHE = "photo-stamp-v3";
-const FILES = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png"];
+const CACHE = "photo-stamp-v4";
+const FILES = ["./", "./index.html", "./app.js", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png"];
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES)).then(() => self.skipWaiting()));
 });
