@@ -56,9 +56,12 @@ textarea{resize:none}
 .chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:transparent}
 .status{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .st{appearance:none;border:2px solid var(--line);background:var(--bg);color:var(--fg);border-radius:10px;font:700 16px var(--font);padding:12px 4px;cursor:pointer}
-.st[data-v="양호"][aria-pressed="true"]{background:var(--good);border-color:var(--good);color:#fff}
+.st[data-v="우수"][aria-pressed="true"]{background:var(--good);border-color:var(--good);color:#fff}
 .st[data-v="미흡"][aria-pressed="true"]{background:var(--bad);border-color:var(--bad);color:#fff}
-.st[data-v="확인 필요"][aria-pressed="true"]{background:var(--check);border-color:var(--check);color:#fff}
+.st[data-v="권장"][aria-pressed="true"]{background:var(--check);border-color:var(--check);color:#fff}
+.status.two{grid-template-columns:repeat(2,1fr)}
+.st[data-c="품질"][aria-pressed="true"]{background:#2a6fdb;border-color:#2a6fdb;color:#fff}
+.st[data-c="환경"][aria-pressed="true"]{background:#0f8b8d;border-color:#0f8b8d;color:#fff}
 .check{display:flex;align-items:center;gap:10px;font-size:15px;cursor:pointer}
 .check input{width:20px;height:20px;accent-color:var(--accent);margin:0;flex:none}
 input[type=range]{width:100%;accent-color:var(--accent)}
@@ -117,6 +120,13 @@ input[type=range]{width:100%;accent-color:var(--accent)}
         <button class="mic" type="button" data-for="part" aria-pressed="false">🎤 음성</button>
       </div>
     </div>
+    <div class="field" id="fCat">
+      <div class="fhead"><span class="fname">구분<span class="req">*</span></span></div>
+      <div class="status two" id="catBtns">
+        <button class="st" type="button" data-c="품질" aria-pressed="false">품질</button>
+        <button class="st" type="button" data-c="환경" aria-pressed="false">환경</button>
+      </div>
+    </div>
     <div class="field" id="fTrade">
       <div class="fhead"><span class="fname">공종<span class="req">*</span></span></div>
       <div class="chips" id="tradeChips"></div>
@@ -124,9 +134,9 @@ input[type=range]{width:100%;accent-color:var(--accent)}
     <div class="field" id="fStatus">
       <div class="fhead"><span class="fname">상태<span class="req">*</span></span></div>
       <div class="status" id="statusBtns">
-        <button class="st" type="button" data-v="양호" aria-pressed="false">양호</button>
+        <button class="st" type="button" data-v="우수" aria-pressed="false">우수</button>
         <button class="st" type="button" data-v="미흡" aria-pressed="false">미흡</button>
-        <button class="st" type="button" data-v="확인 필요" aria-pressed="false">확인 필요</button>
+        <button class="st" type="button" data-v="권장" aria-pressed="false">권장</button>
       </div>
     </div>
   </section>

@@ -5,6 +5,7 @@
   // ===== 목록 (여기만 고치면 화면 후보가 바뀝니다. 점검 항목표에 맞춰 채우세요) =====
   const PARTS = ["거실", "주방", "욕실", "안방", "방", "세대 현관", "발코니", "다용도실", "복도", "계단실", "지하주차장", "옥상", "외벽"];
   const TRADES = ["방화문·창호", "방수", "타일", "결로", "균열", "바닥구조", "변경시공", "설비", "기타"];
+  const TRADES_ENV = ["비산먼지", "소음·진동", "폐기물", "세륜·수질", "기타"];
   const TO_LIST = ["", "공사팀장", "현장소장", "공무", "협력업체 담당", "감리", "기타"];
   const CAND = {
     "방화문·창호": { p: ["실링 누락", "개폐 불량", "하드웨어 미설치", "인정표시 확인 안 됨", "틈새 과다"], a: ["실링 보완 후 재점검", "개폐 조정", "하드웨어 설치 확인", "인정서 확인"] },
@@ -15,12 +16,16 @@
     "바닥구조": { p: ["수평 불량", "완충재 누락", "들뜸·소음", "두께 부족"], a: ["레벨 측정 기록", "완충재 확인", "보수 후 재점검"] },
     "변경시공": { p: ["도면과 다름", "승인 기록 없음", "자재 변경"], a: ["변경 승인 서류 확인", "도면 대조", "감리 확인 요청"] },
     "설비": { p: ["누수", "배관 구배 불량", "보온 누락", "고정 불량"], a: ["누수 시험", "구배 재조정", "보온 보완", "고정 보강"] },
-    "기타": { p: ["정리정돈 불량", "안전시설 미흡"], a: ["정리 후 재확인", "담당자 확인 요청"] }
+    "기타": { p: ["정리정돈 불량", "안전시설 미흡", "내화 뿜칠 갈라짐"], a: ["정리 후 재확인", "담당자 확인 요청", "상온 시 보수 작업 실시"] },
+    "비산먼지": { p: ["방진막 훼손", "살수 미실시", "덮개 미설치"], a: ["방진막 보수", "살수 실시", "덮개 설치"] },
+    "소음·진동": { p: ["방음벽 훼손", "작업시간 외 작업", "측정 기록 없음"], a: ["방음벽 보수", "작업시간 준수", "소음 측정 기록"] },
+    "폐기물": { p: ["분리 보관 미흡", "보관 기간 초과", "표지판 없음"], a: ["분리 보관", "반출 처리", "표지판 설치"] },
+    "세륜·수질": { p: ["세륜시설 미가동", "침사지 관리 미흡", "오수 유출"], a: ["세륜시설 가동", "침사지 준설", "유출 차단"] }
   };
   const LIMIT = { reason: 30, problem: 40, advice: 40 };
   const MAX_SIDE = 4096;
   const FONT = '"Apple SD Gothic Neo","Noto Sans KR","Noto Sans CJK KR","Malgun Gothic",sans-serif';
-  const COLORS = { "양호": "#1f8a4c", "미흡": "#e0362a", "확인 필요": "#e0a000" };
+  const COLORS = { "우수": "#22a356", "미흡": "#e0362a", "권장": "#e0a000", "품질": "#3d82f0", "환경": "#12a3a6" };
 
   const ui = {};
   ["site", "dong", "floor", "part", "reason", "problem", "advice", "to", "due", "tags", "author",
@@ -28,7 +33,7 @@
   const out = $("out"), tag = $("tag"), hint = $("hint"), toast = $("toast"), cam = $("cam");
   const saveBtn = $("saveBtn"), shareBtn = $("shareBtn");
 
-  let trade = "", status = "", tagsEdited = false;
+  let cat = "", trade = "", status = "", tagsEdited = false;
   let source = null, origFile = null, shotTime = null, lastBlob = null, lastUrl = null, savedThisShot = false;
 
   // ===== 저장소 (이 휴대폰에만) =====
@@ -44,7 +49,7 @@
   const saveS = () => {
     Object.assign(S, { site: ui.site.value, dong: ui.dong.value, floor: ui.floor.value, author: ui.author.value,
       autosave: ui.autosave.checked, saveOrig: ui.saveOrig.checked, clearAfter: ui.clearAfter.checked,
-      hideSite: ui.hideSite.checked, size: ui.size.value });
+      hideSite: ui.hideSite.checked, size: ui.size.value, cat });
     store(KEY, S);
   };
 
@@ -119,14 +124,20 @@
   };
   function drawChips() {
     chips("partChips", PARTS, (v) => { ui.part.value = v; update(); }, (v) => ui.part.value === v);
-    chips("tradeChips", TRADES, (v) => { trade = trade === v ? "" : v; update(); }, (v) => v === trade);
+    chips("tradeChips", cat === "환경" ? TRADES_ENV : TRADES, (v) => { trade = trade === v ? "" : v; update(); }, (v) => v === trade);
     const c = CAND[trade] || { p: [], a: [] };
     const has = (el) => (v) => el.value.split(/\s*,\s*/).includes(v);
     chips("problemChips", c.p, (v) => { addText(ui.problem, v, LIMIT.problem); update(); }, has(ui.problem));
     chips("adviceChips", c.a, (v) => { addText(ui.advice, v, LIMIT.advice); update(); }, has(ui.advice));
-    document.querySelectorAll(".st").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === status ? "true" : "false"));
+    document.querySelectorAll(".st[data-v]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === status ? "true" : "false"));
+    document.querySelectorAll(".st[data-c]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.c === cat ? "true" : "false"));
   }
-  document.querySelectorAll(".st").forEach((b) => b.addEventListener("click", () => { status = status === b.dataset.v ? "" : b.dataset.v; update(); }));
+  document.querySelectorAll(".st[data-v]").forEach((b) => b.addEventListener("click", () => { status = status === b.dataset.v ? "" : b.dataset.v; update(); }));
+  document.querySelectorAll(".st[data-c]").forEach((b) => b.addEventListener("click", () => {
+    cat = cat === b.dataset.c ? "" : b.dataset.c;
+    if (trade && !(cat === "환경" ? TRADES_ENV : TRADES).includes(trade)) trade = "";   // 구분이 바뀌면 맞지 않는 공종은 비움
+    update();
+  }));
   TO_LIST.forEach((v) => { const o = document.createElement("option"); o.value = v; o.textContent = v || "선택 안 함"; ui.to.appendChild(o); });
 
   // ===== 값 정리 =====
@@ -139,9 +150,9 @@
   const oneLine = (s) => s.replace(/\s*\n\s*/g, " ").trim();
   function autoTags() {
     const t = [];
+    if (cat) t.push("#" + cat);
     if (trade) t.push("#" + trade.replace(/[·\s]/g, ""));
-    if (status) t.push("#" + status.replace(/\s/g, ""));
-    if (status === "미흡" || status === "확인 필요") t.push("#품질");
+    if (status) t.push("#" + status);
     if (ui.due.value) t.push("#보완기한");
     return t.join(" ");
   }
@@ -149,6 +160,7 @@
     const m = [];
     if (!ui.site.value) m.push(["fSite", "현장명"]);
     if (!ui.dong.value.trim() && !ui.floor.value.trim() && !ui.part.value.trim()) m.push(["fLoc", "위치"]);
+    if (!cat) m.push(["fCat", "구분"]);
     if (!trade) m.push(["fTrade", "공종"]);
     if (!status) m.push(["fStatus", "상태"]);
     return m;
@@ -167,7 +179,7 @@
     L.push({ t: site ? site + "  " + when : when });
     const loc = locText();
     const head = [loc, trade].filter(Boolean).join("  ·  ");
-    if (head || status) L.push({ t: head, status });
+    if (head || status || cat) L.push({ t: head, status, cat });
     const reason = oneLine(ui.reason.value);
     if (reason) L.push({ t: "이유 : " + reason });
     const prob = oneLine(ui.problem.value);
@@ -202,20 +214,19 @@
     const lastBase = h - m - Math.round(fs * 0.2);
     lines.forEach((ln, i) => {
       const y = lastBase - (lines.length - 1 - i) * lh;
+      const cTxt = ln.cat ? "[" + ln.cat + "] " : "";
+      const cW = cTxt ? ctx.measureText(cTxt).width : 0;
       const stTxt = ln.status ? (ln.t ? "  ·  " : "") + ln.status : "";
       const stW = stTxt ? ctx.measureText(stTxt).width : 0;
-      const t = ln.t ? fit(ctx, ln.t, maxW - stW) : "";
+      const t = ln.t ? fit(ctx, ln.t, maxW - stW - cW) : "";
       const tw = ctx.measureText(t).width;
-      const light = lumaAt(ctx, m, y - fs * 0.9, tw + stW, fs * 1.1, w, h) < 135;
+      const light = lumaAt(ctx, m, y - fs * 0.9, cW + tw + stW, fs * 1.1, w, h) < 135;
       ctx.lineWidth = Math.max(2, fs * 0.2);
+      const colored = (txt, x, col) => { ctx.strokeStyle = "rgba(0,0,0,.85)"; ctx.strokeText(txt, x, y); ctx.fillStyle = col; ctx.fillText(txt, x, y); };
+      if (cTxt) colored(cTxt, m, COLORS[ln.cat] || "#fff");          // 구분·상태는 색으로 구분
       ctx.strokeStyle = light ? "rgba(0,0,0,.85)" : "rgba(255,255,255,.9)";
-      if (t) { ctx.strokeText(t, m, y); ctx.fillStyle = light ? "#fff" : "#111"; ctx.fillText(t, m, y); }
-      if (stTxt) {                                  // 상태는 색으로 구분
-        ctx.strokeStyle = "rgba(0,0,0,.85)";
-        ctx.strokeText(stTxt, m + tw, y);
-        ctx.fillStyle = COLORS[ln.status] || "#fff";
-        ctx.fillText(stTxt, m + tw, y);
-      }
+      if (t) { ctx.strokeText(t, m + cW, y); ctx.fillStyle = light ? "#fff" : "#111"; ctx.fillText(t, m + cW, y); }
+      if (stTxt) colored(stTxt, m + cW + tw, COLORS[ln.status] || "#fff");
     });
   }
   function drawSample(ctx, w, h) {
@@ -257,7 +268,7 @@
   function record() {
     const recs = load(REC, []);
     recs.push({
-      파일: baseName() + "_글자.jpg", 현장명: ui.site.value, 촬영시각: fmtWhen(shotTime), 위치: locText(), 공종: trade, 상태: status,
+      파일: baseName() + "_글자.jpg", 현장명: ui.site.value, 촬영시각: fmtWhen(shotTime), 위치: locText(), 구분: cat, 공종: trade, 상태: status,
       사진찍은이유: oneLine(ui.reason.value), 문제점: oneLine(ui.problem.value), 조언대책: oneLine(ui.advice.value),
       전달받은사람: ui.to.value, 보완기한: ui.due.value, 태그: ui.tags.value.trim(), 작성자: ui.author.value.trim()
     });
@@ -311,7 +322,7 @@
   $("exportBtn").addEventListener("click", () => {
     const recs = load(REC, []);
     if (!recs.length) { say("아직 저장된 기록이 없습니다.", true); return; }
-    const cols = Object.keys(recs[0]);
+    const cols = [...new Set(recs.flatMap((r) => Object.keys(r)))];
     const q = (v) => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
     const csv = "﻿" + [cols.map(q).join(",")].concat(recs.map((r) => cols.map((c) => q(r[c])).join(","))).join("\r\n");
     download(new Blob([csv], { type: "text/csv" }), `현장사진기록_${fileStamp(new Date())}.csv`);
@@ -319,7 +330,7 @@
   });
 
   function mark() {
-    ["fSite", "fLoc", "fTrade", "fStatus"].forEach((id) => $(id).classList.remove("missing"));
+    ["fSite", "fLoc", "fCat", "fTrade", "fStatus"].forEach((id) => $(id).classList.remove("missing"));
     missing().forEach(([id]) => $(id).classList.add("missing"));
   }
 
@@ -388,6 +399,7 @@
   if (navigator.canShare) shareBtn.hidden = false;
 
   // ===== 시작 =====
+  cat = S.cat || "";
   ui.dong.value = S.dong || ""; ui.floor.value = S.floor || ""; ui.author.value = S.author || "";
   ui.autosave.checked = S.autosave !== false; ui.saveOrig.checked = S.saveOrig !== false;
   ui.clearAfter.checked = S.clearAfter !== false; ui.hideSite.checked = !!S.hideSite; ui.size.value = S.size || "3";
